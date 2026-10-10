@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Settings</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #000206;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Fixed Mobile App Frame */
+    .mobile-frame {
+      width: 100%;
+      max-width: 412px; /* Standard phone width */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #06090f;
+      position: relative;
+    }
+
+    /* Fixed Sticky Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(6, 9, 15, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 16px 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      margin-top: 1px;
+      border-radius: 6px;
+      transition: opacity 0.2s;
+    }
+
+    .back-btn:active {
+      opacity: 0.5;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-text h1 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      line-height: 1.2;
+    }
+
+    .header-text p {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Scrollable Content */
+    .scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 14px 12px 36px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Hide scrollbars for slick app look */
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    .scroll-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Group Sections */
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: #627289;
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+
+    .card {
+      background-color: #0b101b;
+      border: 1px solid #141b2b;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Compact List Items */
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .item:active {
+      background-color: #101625;
+    }
+
+    .item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 44px;
+      right: 0;
+      height: 1px;
+      background-color: #121827;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .icon-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .item-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-subtitle {
+      font-size: 10.5px;
+      color: #627289;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .item-value {
+      font-size: 11.5px;
+      color: #798a9f;
+    }
+
+    .chevron {
+      color: #435165;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Icon Accent Colors */
+    .icon-blue { color: #3b82f6; }
+    .icon-purple { color: #a855f7; }
+    .icon-pink { color: #ec4899; }
+    .icon-green { color: #10b981; }
+    .icon-orange { color: #f97316; }
+    .icon-cyan { color: #06b6d4; }
+
+    /* Compact Mobile Switches */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #1e2638;
+      border-radius: 20px;
+      transition: background-color 0.22s ease;
+    }
+
+    .slider::before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(16px);
+    }
+
+    .switch.switch-indigo input:checked + .slider {
+      background-color: #6366f1;
+    }
+
+    .switch.switch-pink input:checked + .slider {
+      background-color: #ec4899;
+    }
+
+    .switch.switch-green input:checked + .slider {
+      background-color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+
+    <!-- Fixed Header -->
+    <header class="header">
+      <button class="back-btn" aria-label="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <div class="header-text">
+        <h1>Settings</h1>
+        <p>Customize your movie experience.</p>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Body -->
+    <main class="scroll-container">
+
+      <!-- DOWNLOADS -->
+      <section>
+        <h2 class="section-title">DOWNLOADS</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Download Quality</span>
+                <span class="item-subtitle">Choose the quality for downloaded videos.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">High</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Download Over Wi-Fi Only</span>
+                <span class="item-subtitle">Use Wi-Fi only for downloads.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-indigo">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Save Downloads To</span>
+                <span class="item-subtitle">Choose where to save downloaded files.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">Internal Storage</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Manage Downloads</span>
+                <span class="item-subtitle">View and manage your downloaded content.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- APPEARANCE -->
+      <section>
+        <h2 class="section-title">APPEARANCE</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+                  <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+                  <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                  <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+                  <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Theme</span>
+                <span class="item-subtitle">Choose your app theme.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">Dark</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">App Language</span>
+                <span class="item-subtitle">Select your preferred language.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">English</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS -->
+      <section>
+        <h2 class="section-title">NOTIFICATIONS</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Push Notifications</span>
+                <span class="item-subtitle">Get notified about new content and updates.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-pink">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                  <line x1="7" y1="2" x2="7" y2="22"></line>
+                  <line x1="17" y1="2" x2="17" y2="22"></line>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <line x1="2" y1="7" x2="7" y2="7"></line>
+                  <line x1="2" y1="17" x2="7" y2="17"></line>
+                  <line x1="17" y1="17" x2="22" y2="17"></line>
+                  <line x1="17" y1="7" x2="22" y2="7"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">New Movie Alerts</span>
+                <span class="item-subtitle">Be the first to know about new movies.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-pink">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                  <polyline points="17 2 12 7 7 2"></polyline>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">New Episode Alerts</span>
+                <span class="item-subtitle">Get notified when new episodes are available.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-pink">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Recommendations</span>
+                <span class="item-subtitle">Receive personalized movie recommendations.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-pink">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATA USAGE -->
+      <section>
+        <h2 class="section-title">DATA USAGE</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="16"></line>
+                  <line x1="12" y1="20" x2="12" y2="10"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Streaming Quality</span>
+                <span class="item-subtitle">Choose the streaming quality for mobile data.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">Ultra HD 4K</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Reduce Data Usage</span>
+                <span class="item-subtitle">Prefer lower bandwidth for streaming.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-green">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Download Over Wi-Fi Only</span>
+                <span class="item-subtitle">Prevent downloads using mobile data.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <label class="switch switch-green">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRIVACY & STORAGE -->
+      <section>
+        <h2 class="section-title">PRIVACY & STORAGE</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-orange">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Clear Search History</span>
+                <span class="item-subtitle">Remove your recent searches.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-orange">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Clear Cache</span>
+                <span class="item-subtitle">Free up temporary files.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">128 MB</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPPORT & ABOUT -->
+      <section>
+        <h2 class="section-title">SUPPORT & ABOUT</h2>
+        <div class="card">
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Contact Support</span>
+                <span class="item-subtitle">Get help or send us a message.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Privacy Policy</span>
+                <span class="item-subtitle">Learn how we handle your data.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">Terms of Use</span>
+                <span class="item-subtitle">Read our terms and conditions.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-left">
+              <div class="icon-box icon-cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </div>
+              <div class="item-text">
+                <span class="item-title">About Flower Box</span>
+                <span class="item-subtitle">App version and more information.</span>
+              </div>
+            </div>
+            <div class="item-right">
+              <span class="item-value">v1.0.0</span>
+              <div class="chevron">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Clicking anywhere along a toggle row changes switch state smoothly
+    document.querySelectorAll('.item').forEach(item => {
+      const checkbox = item.querySelector('input[type="checkbox"]');
+      if (checkbox) {
+        item.addEventListener('click', (e) => {
+          if (!e.target.closest('.switch')) {
+            checkbox.checked = !checkbox.checked;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
