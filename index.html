@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0b0b0f">
+
+    <title>Coming Soon</title>
+
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --surface: #14141d;
+            --surface-light: #1c1c28;
+            --primary: #ff5722;
+            --primary-soft: rgba(255, 87, 34, 0.13);
+            --text: #ffffff;
+            --muted: #90909f;
+            --border: rgba(255, 255, 255, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100dvh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    ellipse at 50% 34%,
+                    rgba(255, 87, 34, 0.055),
+                    transparent 48%
+                ),
+                var(--bg);
+        }
+
+        /* Main content */
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 34px 25px 28px;
+            text-align: center;
+        }
+
+        .illustration {
+            width: 208px;
+            height: 208px;
+            position: relative;
+            display: grid;
+            place-items: center;
+            margin-bottom: 30px;
+        }
+
+        .orbit {
+            position: absolute;
+            inset: 7px;
+            border: 1px solid rgba(255, 87, 34, 0.12);
+            border-radius: 50%;
+            animation: rotate 22s linear infinite;
+        }
+
+        .orbit::before,
+        .orbit::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 14px rgba(255, 87, 34, 0.7);
+        }
+
+        .orbit::before {
+            top: 31px;
+            left: 24px;
+        }
+
+        .orbit::after {
+            right: 15px;
+            bottom: 47px;
+            width: 5px;
+            height: 5px;
+        }
+
+        .orbit-two {
+            position: absolute;
+            inset: 25px;
+            border: 1px dashed rgba(255, 255, 255, 0.09);
+            border-radius: 50%;
+            animation: rotate 35s linear infinite reverse;
+        }
+
+        .icon-glow {
+            position: absolute;
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            background: rgba(255, 87, 34, 0.13);
+            filter: blur(30px);
+        }
+
+        .toolbox {
+            position: relative;
+            z-index: 1;
+            width: 104px;
+            height: 104px;
+            display: grid;
+            place-items: center;
+            border-radius: 30px;
+            background: linear-gradient(145deg, #25232c, #15141b);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            box-shadow:
+                0 20px 55px rgba(0, 0, 0, 0.45),
+                inset 0 1px rgba(255, 255, 255, 0.07);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .toolbox svg {
+            width: 56px;
+            height: 56px;
+            color: var(--primary);
+        }
+
+        .spark {
+            position: absolute;
+            color: #ffb28f;
+            font-size: 19px;
+        }
+
+        .spark-one {
+            top: 38px;
+            right: 24px;
+        }
+
+        .spark-two {
+            bottom: 35px;
+            left: 22px;
+            font-size: 13px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            margin-bottom: 19px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 87, 34, 0.18);
+            background: var(--primary-soft);
+            color: #ff956f;
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        h1 {
+            max-width: 360px;
+            font-size: clamp(31px, 8vw, 42px);
+            line-height: 1.12;
+            font-weight: 800;
+            letter-spacing: -1.8px;
+        }
+
+        h1 span {
+            color: var(--primary);
+        }
+
+        .description {
+            max-width: 315px;
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Progress panel */
+
+        .progress-panel {
+            width: 100%;
+            max-width: 355px;
+            padding: 19px;
+            margin-top: 29px;
+            text-align: left;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: linear-gradient(
+                145deg,
+                rgba(255, 255, 255, 0.035),
+                rgba(255, 255, 255, 0.012)
+            );
+        }
+
+        .progress-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .progress-title {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress-label {
+            color: #ff956f;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .progress-track {
+            height: 5px;
+            width: 100%;
+            overflow: hidden;
+            background: #2a2933;
+            border-radius: 10px;
+        }
+
+        .progress-fill {
+            width: 72%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(
+                90deg,
+                #ff5722,
+                #ff986f
+            );
+            box-shadow: 0 0 12px rgba(255, 87, 34, 0.35);
+        }
+
+        .progress-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 13px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .progress-footer span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mini-check {
+            width: 15px;
+            height: 15px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #ff956f;
+            background: var(--primary-soft);
+            font-size: 10px;
+        }
+
+        /* Notification-style message */
+
+        .notice {
+            width: 100%;
+            max-width: 355px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            margin-top: 13px;
+            text-align: left;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: var(--surface);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .notice:hover {
+            border-color: rgba(255, 87, 34, 0.4);
+        }
+
+        .notice-icon {
+            width: 39px;
+            height: 39px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #20202b;
+            color: #ffb18f;
+        }
+
+        .notice-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .notice-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notice-title {
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .notice-description {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .notice-arrow {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            color: #777785;
+        }
+
+        /* Bottom app area */
+
+        .app-footer {
+            padding: 18px 24px calc(18px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border);
+            text-align: center;
+            background: rgba(11, 11, 15, 0.95);
+        }
+
+        .footer-message {
+            color: #777785;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .footer-message span {
+            color: #b8b8c5;
+        }
+
+        .footer-brand {
+            margin-top: 8px;
+            color: #51515e;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+        }
+
+        /* Slide-down panel from up to down */
+        .slide-panel-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .slide-panel-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            border-radius: 0 0 24px 24px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            z-index: 101;
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide-panel-overlay.active .slide-panel {
+            transform: translateY(0);
+        }
+
+        .slide-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .slide-panel-header h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .close-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .slide-panel-body {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .slide-panel-body p {
+            margin-bottom: 12px;
+        }
+
+        .slide-panel-body p:last-child {
+            margin-bottom: 0;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-height: 740px) {
+            .content {
+                padding-top: 24px;
+                padding-bottom: 24px;
+            }
+
+            .illustration {
+                width: 160px;
+                height: 160px;
+                margin-bottom: 20px;
+            }
+
+            .toolbox {
+                width: 85px;
+                height: 85px;
+                border-radius: 25px;
+            }
+
+            .toolbox svg {
+                width: 46px;
+                height: 46px;
+            }
+
+            .progress-panel {
+                margin-top: 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+
+        <!-- Slide-down Panel Overlay & Container -->
+        <div class="slide-panel-overlay" id="slidePanelOverlay">
+            <div class="slide-panel" id="slidePanel">
+                <div class="slide-panel-header">
+                    <h3>Something Amazing Is Coming</h3>
+                    <button class="close-btn" id="closePanelBtn" aria-label="Close panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+                <div class="slide-panel-body">
+                    <p>We're working on this feature to bring you a better experience. Soon, you'll be able to explore, view, and manage your digital library, including images, PDFs, text files, PNGs, and background removal tools.</p>
+                    <p>This feature is currently under development. Please check back soon!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main screen -->
+        <section class="content">
+
+            <div class="illustration" aria-hidden="true">
+                <div class="orbit"></div>
+                <div class="orbit-two"></div>
+                <div class="icon-glow"></div>
+
+                <div class="toolbox">
+                    <svg viewBox="0 0 64 64" fill="none"
+                         stroke="currentColor" stroke-width="2.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M22 22v-5a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v5"/>
+                        <rect x="9" y="22" width="46" height="32" rx="7"/>
+                        <path d="M9 34h46"/>
+                        <path d="M27 34v5h10v-5"/>
+                        <path d="m27 46 4 4 7-8"/>
+                    </svg>
+                </div>
+
+                <span class="spark spark-one">✦</span>
+                <span class="spark spark-two">✧</span>
+            </div>
+
+            <div class="eyebrow">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 2"/>
+                </svg>
+                Something exciting is coming
+            </div>
+
+            <h1>
+                We're building<br>
+                something <span>great.</span>
+            </h1>
+
+            <p class="description">
+                We're working behind the scenes to bring you a better
+                experience. This space will be ready for you soon.
+            </p>
+
+            <div class="progress-panel">
+                <div class="progress-heading">
+                    <span class="progress-title">Development progress</span>
+                    <span class="progress-label">In progress</span>
+                </div>
+
+                <div
+                    class="progress-track"
+                    role="progressbar"
+                    aria-label="Development progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="72"
+                >
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="progress-footer">
+                    <span>
+                        <span class="mini-check">✓</span>
+                        Building your experience
+                    </span>
+                    <span>More updates soon</span>
+                </div>
+            </div>
+
+            <div class="notice" id="stayTunedNotice">
+                <div class="notice-icon">
+                    <svg viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                </div>
+
+                <div class="notice-text">
+                    <div class="notice-title">Stay tuned</div>
+                    <div class="notice-description">
+                        We're preparing something worth waiting for.
+                    </div>
+                </div>
+
+                <svg class="notice-arrow" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6"/>
+                </svg>
+            </div>
+
+        </section>
+
+        <!-- App footer -->
+        <footer class="app-footer">
+            <p class="footer-message">
+                Thank you for your patience.<br>
+                <span>We'll be ready before you know it.</span>
+            </p>
+
+            <div class="footer-brand">
+                MADE WITH CARE
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // Slide down panel toggle logic
+        const stayTunedNotice = document.getElementById("stayTunedNotice");
+        const slidePanelOverlay = document.getElementById("slidePanelOverlay");
+        const closePanelBtn = document.getElementById("closePanelBtn");
+
+        stayTunedNotice.addEventListener("click", function () {
+            slidePanelOverlay.classList.add("active");
+        });
+
+        closePanelBtn.addEventListener("click", function () {
+            slidePanelOverlay.classList.remove("active");
+        });
+
+        slidePanelOverlay.addEventListener("click", function (e) {
+            if (e.target === slidePanelOverlay) {
+                slidePanelOverlay.classList.remove("active");
+            }
+        });
+
+        document.addEventListener("contextmenu", function (event) {
+            event.preventDefault();
+        });
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            document.documentElement.style.scrollBehavior = "auto";
+        }
+    </script>
+</body>
+</html>
